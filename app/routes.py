@@ -1,55 +1,43 @@
-from flask import request, jsonify
-from app import app, db
-from app.models import Demo
+from flask import Flask, request
+from app.models import Config, AppConfig
 
-# 添加用户
-@app.route('/demos', methods=['POST'])
-def add_demo():
-    data = request.get_json()
-    new_demo = Demo(info1=data['info1'], info2=data['info2'])
-    db.session.add(new_demo)
-    db.session.commit()
-    return jsonify({'message': 'Demo added successfully'})
+app = Flask(__name__)
 
-# 获取所有用户
-@app.route('/demos', methods=['GET'])
-def get_demos():
-    demos = Demo.query.all()
-    demo_list = []
-    for demo in demos:
-        demo_data = {'id': demo.id, 'info1': demo.info1, 'info2': demo.info2}
-        demo_list.append(demo_data)
-    return jsonify({'demos': demo_list})
+@app.route('/config_create', methods=['POST'])
+def config_create():
+    parent_id = request.form.get('parent_id')
+    key = request.form.get('key')
+    value = request.form.get('value')
+    status = request.form.get('status')
+    config_id = Config.create(parent_id, key, value, status)
+    return str(config_id)
 
-# 获取单个用户
-@app.route('/demos/<int:demo_id>', methods=['GET'])
-def get_demo(demo_id):
-    demo = Demo.query.get(demo_id)
-    if demo:
-        demo_data = {'id': demo.id, 'info1': demo.info1, 'info2': demo.info2}
-        return jsonify(demo_data)
-    return jsonify({'message': 'Demo not found'}), 404
+@app.route('/config_update', methods=['POST'])
+def config_update():
+    id = request.form.get('id')
+    value = request.form.get('value')
+    updated_config_id = Config.update(id, value)
+    return str(updated_config_id)
 
-# 更新用户信息
-@app.route('/demos/<int:demo_id>', methods=['PUT'])
-def update_demo(demo_id):
-    demo = Demo.query.get(demo_id)
-    if not demo:
-        return jsonify({'message': 'Demo not found'}), 404
+@app.route('/config_status_update', methods=['POST'])
+def config_status_update():
+    id = request.form.get('id')
+    status = request.form.get('status')
+    updated_config_id = Config.update_status(id, status)
+    return str(updated_config_id)
 
-    data = request.get_json()
-    demo.info1 = data['info1']
-    demo.info2 = data['info2']
-    db.session.commit()
-    return jsonify({'message': 'Demo updated successfully'})
+@app.route('/app_config_create', methods=['POST'])
+def app_config_create():
+    value = request.form.get('value')
+    app_id = AppConfig.create(value)
+    return str(app_id)
 
-# 删除用户
-@app.route('/demos/<int:demo_id>', methods=['DELETE'])
-def delete_demo(demo_id):
-    demo = Demo.query.get(demo_id)
-    if not demo:
-        return jsonify({'message': 'Demo not found'}), 404
+@app.route('/get_value', methods=['GET'])
+def get_value():
+    app_code = request.args.get('app_code')
+    key = request.args.get('key')
+    result = Config.get_value(app_code, key)
+    return result
 
-    db.session.delete(demo)
-    db.session.commit()
-    return jsonify({'message': 'Demo deleted successfully'})
+if __name__ == '__main__':
+    app.run()

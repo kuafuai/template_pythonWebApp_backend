@@ -1,0 +1,1 @@
+在`html_frontend`服务中，通过HTTP接口调用后端的RESTful API来获取配置结果，并将结果展示在界面上。
