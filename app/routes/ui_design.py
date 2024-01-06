@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request
 
 app = Flask(__name__)
 
@@ -60,9 +60,9 @@ def edit():
     ui_design.edit_data(data)
     return 'Edit Page'
 
-@app.route('/visualize')
-def visualize():
-    ui_design.visualize_data()
+@app.route('/visualize/<data>')
+def visualize(data):
+    ui_design.visualize_data(data)
     return 'Visualize Page'
 
 @app.route('/help')
