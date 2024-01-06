@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request
 
 app = Flask(__name__)
 
@@ -49,7 +49,7 @@ class UIDesign:
         # implementation for accessing help and support documentation
         return "Accessing help and support documentation"
 
-ui = UIDesign()
+ui_design = UIDesign()
 
 @app.route('/')
 def home():
@@ -57,32 +57,34 @@ def home():
 
 @app.route('/create_interface')
 def create_interface():
-    ui.create_interface()
+    ui_design.create_interface()
     return "User interface created"
 
 @app.route('/navigate_interface')
 def navigate_interface():
-    return ui.navigate_interface()
+    return ui_design.navigate_interface()
 
 @app.route('/responsive_layout')
 def responsive_layout():
-    return ui.responsive_layout()
+    return ui_design.responsive_layout()
 
-@app.route('/input_data/<data>')
-def input_data(data):
-    return ui.input_data(data)
+@app.route('/input_data', methods=['POST'])
+def input_data():
+    data = request.form['data']
+    return ui_design.input_data(data)
 
-@app.route('/edit_data/<data>')
-def edit_data(data):
-    return ui.edit_data(data)
+@app.route('/edit_data', methods=['POST'])
+def edit_data():
+    data = request.form['data']
+    return ui_design.edit_data(data)
 
 @app.route('/visualize_data/<data>')
 def visualize_data(data):
-    return ui.visualize_data(data)
+    return ui_design.visualize_data(data)
 
 @app.route('/access_help')
 def access_help():
-    return ui.access_help()
+    return ui_design.access_help()
 
 if __name__ == '__main__':
     app.run()

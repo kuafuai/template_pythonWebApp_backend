@@ -12,7 +12,7 @@ class DataManagement:
         # implementation for uploading data
         # Example implementation:
         # upload data to a remote server
-        pass
+        print("Uploading data:", data)
 
     def store_data(self, data):
         """
@@ -27,7 +27,7 @@ class DataManagement:
         # implementation for storing data
         # Example implementation:
         # store data in a database
-        pass
+        print("Storing data:", data)
 
     def index_data(self, data):
         """
@@ -42,7 +42,7 @@ class DataManagement:
         # implementation for indexing data
         # Example implementation:
         # create an index for the data in a search engine
-        pass
+        print("Indexing data:", data)
 
     def search_data(self, keyword):
         """
@@ -57,7 +57,7 @@ class DataManagement:
         # implementation for searching data
         # Example implementation:
         # search for data in a search engine based on the keyword
-        pass
+        print("Searching data with keyword:", keyword)
 
     def delete_data(self, data_id):
         """
@@ -72,4 +72,13 @@ class DataManagement:
         # implementation for deleting data
         # Example implementation:
         # delete data from a database based on the ID
-        pass
+        print("Deleting data with ID:", data_id)
+
+
+# Example usage
+data_manager = DataManagement()
+data_manager.upload_data("Sample data")
+data_manager.store_data("Sample data")
+data_manager.index_data("Sample data")
+data_manager.search_data("keyword")
+data_manager.delete_data(123)
