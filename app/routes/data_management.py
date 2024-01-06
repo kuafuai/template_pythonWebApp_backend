@@ -5,8 +5,11 @@ class DataManagement:
 
         Args:
             data: The data to be uploaded.
+
+        Returns:
+            None
         """
-        # actual implementation for uploading data
+        # implementation for uploading data
         # Example implementation:
         # upload data to a remote server
         pass
@@ -17,8 +20,11 @@ class DataManagement:
 
         Args:
             data: The data to be stored.
+
+        Returns:
+            None
         """
-        # actual implementation for storing data
+        # implementation for storing data
         # Example implementation:
         # store data in a database
         pass
@@ -29,8 +35,11 @@ class DataManagement:
 
         Args:
             data: The data to be indexed.
+
+        Returns:
+            None
         """
-        # actual implementation for indexing data
+        # implementation for indexing data
         # Example implementation:
         # create an index for the data in a search engine
         pass
@@ -41,10 +50,13 @@ class DataManagement:
 
         Args:
             keyword: The keyword to search for.
+
+        Returns:
+            The search results.
         """
-        # actual implementation for searching data
+        # implementation for searching data
         # Example implementation:
-        # search for data in a database based on the keyword
+        # search for data in a search engine based on the keyword
         pass
 
     def delete_data(self, data_id):
@@ -53,8 +65,11 @@ class DataManagement:
 
         Args:
             data_id: The ID of the data to be deleted.
+
+        Returns:
+            None
         """
-        # actual implementation for deleting data
+        # implementation for deleting data
         # Example implementation:
         # delete data from a database based on the ID
         pass

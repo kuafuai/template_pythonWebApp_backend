@@ -1,71 +1,88 @@
-from flask import Flask, request
+from flask import Flask
 
 app = Flask(__name__)
 
 class UIDesign:
+    def __init__(self):
+        self.interface = None
+        self.data = None
+    
     def create_interface(self):
         # implementation for creating user interface
-        pass
+        self.interface = "User interface created"
     
     def navigate_interface(self):
         # implementation for navigating user interface
-        pass
+        if self.interface:
+            return "Navigating user interface"
+        else:
+            return "No user interface created"
     
     def responsive_layout(self):
         # implementation for implementing responsive layout
-        pass
+        if self.interface:
+            return "Implementing responsive layout"
+        else:
+            return "No user interface created"
     
     def input_data(self, data):
         # implementation for inputting data
-        pass
+        self.data = data
+        return "Data inputted"
     
     def edit_data(self, data):
         # implementation for editing data
-        pass
+        if self.data:
+            self.data = data
+            return "Data edited"
+        else:
+            return "No data inputted"
     
     def visualize_data(self, data):
         # implementation for visualizing data
-        pass
+        if self.data:
+            return f"Visualizing data: {data}"
+        else:
+            return "No data inputted"
     
     def access_help(self):
         # implementation for accessing help and support documentation
-        pass
+        return "Accessing help and support documentation"
 
-ui_design = UIDesign()
+ui = UIDesign()
 
 @app.route('/')
 def home():
-    ui_design.create_interface()
-    return 'Home Page'
+    return "Welcome to the User Interface Design Framework"
 
-@app.route('/navigate')
-def navigate():
-    ui_design.navigate_interface()
-    return 'Navigate Page'
+@app.route('/create_interface')
+def create_interface():
+    ui.create_interface()
+    return "User interface created"
 
-@app.route('/layout')
-def layout():
-    ui_design.responsive_layout()
-    return 'Layout Page'
+@app.route('/navigate_interface')
+def navigate_interface():
+    return ui.navigate_interface()
 
-@app.route('/input', methods=['POST'])
-def input():
-    data = request.form['data']
-    ui_design.input_data(data)
-    return 'Input Page'
+@app.route('/responsive_layout')
+def responsive_layout():
+    return ui.responsive_layout()
 
-@app.route('/edit', methods=['POST'])
-def edit():
-    data = request.form['data']
-    ui_design.edit_data(data)
-    return 'Edit Page'
+@app.route('/input_data/<data>')
+def input_data(data):
+    return ui.input_data(data)
 
-@app.route('/visualize/<data>')
-def visualize(data):
-    ui_design.visualize_data(data)
-    return 'Visualize Page'
+@app.route('/edit_data/<data>')
+def edit_data(data):
+    return ui.edit_data(data)
 
-@app.route('/help')
-def help():
-    ui_design.access_help()
-    return 'Help Page'
+@app.route('/visualize_data/<data>')
+def visualize_data(data):
+    return ui.visualize_data(data)
+
+@app.route('/access_help')
+def access_help():
+    return ui.access_help()
+
+if __name__ == '__main__':
+    app.run()
