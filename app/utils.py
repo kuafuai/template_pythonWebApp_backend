@@ -3,51 +3,40 @@ import csv
 
 app = Flask(__name__)
 
-# route to save form data
-@app.route('/save', methods=['POST'])
+# define route to save form data
+@app.route('/save_form_data', methods=['POST'])
 def save_form_data():
     # get form data from request
     form_data = request.get_json()
 
-    # save form data to database or any other storage
+    # save form data to database or perform any other operations
 
     return jsonify({'message': 'Form data saved successfully'})
 
-# route to get form data
-@app.route('/get', methods=['GET'])
+# define route to get form data
+@app.route('/get_form_data', methods=['GET'])
 def get_form_data():
-    # get form data from database or any other storage
+    # get form data from database or any other source
+    form_data = {'name': 'John Doe', 'email': 'johndoe@example.com'}
 
-    # return form data as JSON response
     return jsonify(form_data)
 
-# route to export form data to CSV file
-@app.route('/export', methods=['GET'])
+# define route to export form data to CSV
+@app.route('/export_form_data', methods=['GET'])
 def export_form_data():
-    # get form data from database or any other storage
+    # get form data from database or any other source
+    form_data = {'name': 'John Doe', 'email': 'johndoe@example.com'}
 
-    # create a CSV file
-    csv_file = open('form_data.csv', 'w', newline='')
+    # create CSV file
+    csv_file = 'form_data.csv'
+    with open(csv_file, 'w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(['Name', 'Email'])
+        writer.writerow([form_data['name'], form_data['email']])
 
-    # create a CSV writer
-    csv_writer = csv.writer(csv_file)
-
-    # write header row
-    csv_writer.writerow(['Name', 'Email', 'Phone'])
-
-    # write form data rows
-    for data in form_data:
-        csv_writer.writerow([data['name'], data['email'], data['phone']])
-
-    # close the CSV file
-    csv_file.close()
-
-    # return the CSV file as a download response
+    # return CSV file as response
     response = make_response(csv_file)
     response.headers['Content-Disposition'] = 'attachment; filename=form_data.csv'
     response.headers['Content-Type'] = 'text/csv'
 
     return response
-
-if __name__ == '__main__':
-    app.run(debug=True)
