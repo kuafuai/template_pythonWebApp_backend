@@ -1,9 +1,7 @@
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from config import Config
+from app.routes import student_bp
 
-app = Flask(__name__)
-app.config.from_object(Config)
-db = SQLAlchemy(app)
-
-from app import routes
+def create_app():
+    app = Flask(__name__)
+    app.register_blueprint(student_bp)
+    return app
