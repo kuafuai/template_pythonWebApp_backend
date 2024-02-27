@@ -1,55 +1,58 @@
 from flask import request, jsonify
-from app import app, db
-from app.models import Demo
+from app import app
 
-# 添加用户
-@app.route('/demos', methods=['POST'])
-def add_demo():
-    data = request.get_json()
-    new_demo = Demo(info1=data['info1'], info2=data['info2'])
-    db.session.add(new_demo)
-    db.session.commit()
-    return jsonify({'message': 'Demo added successfully'})
+def add_customer():
+    # Get parameters from request body
+    customer_info = request.get_json()
+    
+    # Add customer information to the system
+    
+    # Return added customer information
+    return jsonify(customer_info)
 
-# 获取所有用户
-@app.route('/demos', methods=['GET'])
-def get_demos():
-    demos = Demo.query.all()
-    demo_list = []
-    for demo in demos:
-        demo_data = {'id': demo.id, 'info1': demo.info1, 'info2': demo.info2}
-        demo_list.append(demo_data)
-    return jsonify({'demos': demo_list})
+@app.route('/customers', methods=['POST'])
+def add_customer_route():
+    return add_customer()
 
-# 获取单个用户
-@app.route('/demos/<int:demo_id>', methods=['GET'])
-def get_demo(demo_id):
-    demo = Demo.query.get(demo_id)
-    if demo:
-        demo_data = {'id': demo.id, 'info1': demo.info1, 'info2': demo.info2}
-        return jsonify(demo_data)
-    return jsonify({'message': 'Demo not found'}), 404
+def get_customers():
+    # Get all customers information from the system
+    
+    # Return all customers information
+    return jsonify(customers)
 
-# 更新用户信息
-@app.route('/demos/<int:demo_id>', methods=['PUT'])
-def update_demo(demo_id):
-    demo = Demo.query.get(demo_id)
-    if not demo:
-        return jsonify({'message': 'Demo not found'}), 404
+@app.route('/customers', methods=['GET'])
+def get_customers_route():
+    return get_customers()
 
-    data = request.get_json()
-    demo.info1 = data['info1']
-    demo.info2 = data['info2']
-    db.session.commit()
-    return jsonify({'message': 'Demo updated successfully'})
+def get_customer(customer_id):
+    # Get customer information with the specified customer_id from the system
+    
+    # Return specified customer information
+    return jsonify(customer_info)
 
-# 删除用户
-@app.route('/demos/<int:demo_id>', methods=['DELETE'])
-def delete_demo(demo_id):
-    demo = Demo.query.get(demo_id)
-    if not demo:
-        return jsonify({'message': 'Demo not found'}), 404
+@app.route('/customers/<customer_id>', methods=['GET'])
+def get_customer_route(customer_id):
+    return get_customer(customer_id)
 
-    db.session.delete(demo)
-    db.session.commit()
-    return jsonify({'message': 'Demo deleted successfully'})
+def update_customer(customer_id):
+    # Get parameters from request body
+    customer_info = request.get_json()
+    
+    # Update customer information with the specified customer_id in the system
+    
+    # Return updated customer information
+    return jsonify(customer_info)
+
+@app.route('/customers/<customer_id>', methods=['PUT'])
+def update_customer_route(customer_id):
+    return update_customer(customer_id)
+
+def delete_customer(customer_id):
+    # Delete customer information with the specified customer_id from the system
+    
+    # Return deleted customer information
+    return jsonify(customer_info)
+
+@app.route('/customers/<customer_id>', methods=['DELETE'])
+def delete_customer_route(customer_id):
+    return delete_customer(customer_id)
