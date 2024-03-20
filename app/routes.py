@@ -1,55 +1,45 @@
-from flask import request, jsonify
-from app import app, db
-from app.models import Demo
+from flask import Flask, jsonify, request
+import itchat
 
-# 添加用户
-@app.route('/demos', methods=['POST'])
-def add_demo():
+app = Flask(__name__)
+
+@app.route('/login', methods=['POST'])
+def login():
+    itchat.auto_login()
+    return jsonify({'status': 'success', 'message': 'Login successful'})
+
+@app.route('/send_message', methods=['POST'])
+def send_message():
     data = request.get_json()
-    new_demo = Demo(info1=data['info1'], info2=data['info2'])
-    db.session.add(new_demo)
-    db.session.commit()
-    return jsonify({'message': 'Demo added successfully'})
+    username = data.get('username')
+    message = data.get('message')
+    itchat.send(message, toUserName=username)
+    return jsonify({'status': 'success', 'message': 'Message sent'})
 
-# 获取所有用户
-@app.route('/demos', methods=['GET'])
-def get_demos():
-    demos = Demo.query.all()
-    demo_list = []
-    for demo in demos:
-        demo_data = {'id': demo.id, 'info1': demo.info1, 'info2': demo.info2}
-        demo_list.append(demo_data)
-    return jsonify({'demos': demo_list})
+@app.route('/get_contact_list', methods=['GET'])
+def get_contact_list():
+    contact_list = itchat.get_contact()
+    return jsonify({'status': 'success', 'contact_list': contact_list})
 
-# 获取单个用户
-@app.route('/demos/<int:demo_id>', methods=['GET'])
-def get_demo(demo_id):
-    demo = Demo.query.get(demo_id)
-    if demo:
-        demo_data = {'id': demo.id, 'info1': demo.info1, 'info2': demo.info2}
-        return jsonify(demo_data)
-    return jsonify({'message': 'Demo not found'}), 404
-
-# 更新用户信息
-@app.route('/demos/<int:demo_id>', methods=['PUT'])
-def update_demo(demo_id):
-    demo = Demo.query.get(demo_id)
-    if not demo:
-        return jsonify({'message': 'Demo not found'}), 404
-
+@app.route('/add_friend', methods=['POST'])
+def add_friend():
     data = request.get_json()
-    demo.info1 = data['info1']
-    demo.info2 = data['info2']
-    db.session.commit()
-    return jsonify({'message': 'Demo updated successfully'})
+    username = data.get('username')
+    itchat.add_friend(userName=username)
+    return jsonify({'status': 'success', 'message': 'Friend added'})
 
-# 删除用户
-@app.route('/demos/<int:demo_id>', methods=['DELETE'])
-def delete_demo(demo_id):
-    demo = Demo.query.get(demo_id)
-    if not demo:
-        return jsonify({'message': 'Demo not found'}), 404
+@app.route('/get_user_profile', methods=['GET'])
+def get_user_profile():
+    user_profile = itchat.search_friends()
+    return jsonify({'status': 'success', 'user_profile': user_profile})
 
-    db.session.delete(demo)
-    db.session.commit()
-    return jsonify({'message': 'Demo deleted successfully'})
+@app.route('/update_user_profile', methods=['POST'])
+def update_user_profile():
+    data = request.get_json()
+    username = data.get('username')
+    nickname = data.get('nickname')
+    itchat.update_friend(userName=username, nickName=nickname)
+    return jsonify({'status': 'success', 'message': 'Profile updated'})
+
+if __name__ == '__main__':
+    app.run()
